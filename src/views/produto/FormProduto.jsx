@@ -1,10 +1,12 @@
 import InputMask from "comigo-tech-react-input-mask";
-import React from "react";
 import { Button, Container, Divider, Form, Icon } from "semantic-ui-react";
+import MenuSistema from "../../MenuSistema";
 
 export default function FormProduto() {
   return (
     <div>
+      <MenuSistema tela={"Produto"} />
+
       <div style={{ marginTop: "3%" }}>
         <Container textAlign="justified">
           <h2>
@@ -25,25 +27,16 @@ export default function FormProduto() {
                 <Form.Input required fluid label="Título" maxLength="100" />
 
                 <Form.Input fluid label="Código do Produto" maxLength="100">
-                  <InputMask 
-                  placeholder="Informe o código do Produto" 
-                  />
+                  <InputMask placeholder="Informe o código do Produto" />
                 </Form.Input>
               </Form.Group>
 
-              <Form.Input 
-              required fluid label="Descrição">
-
-                <InputMask
-                 placeholder="Informe a descrição do produto"
-                  />
+              <Form.Input required fluid label="Descrição">
+                <InputMask placeholder="Informe a descrição do produto" />
               </Form.Input>
 
               <Form.Group>
-                <Form.Input 
-                
-                fluid label="Valor unitário" width={6}
-                ></Form.Input>
+                <Form.Input fluid label="Valor unitário" width={6}></Form.Input>
 
                 <Form.Input
                   fluid
@@ -53,16 +46,13 @@ export default function FormProduto() {
                   <InputMask placeholder="30" />
                 </Form.Input>
 
-                      <Form.Input
+                <Form.Input
                   fluid
                   label="Tempo de Entrega Máximo em Minutos"
                   width={6}
                 >
-                  <InputMask
-                  placeholder="40" />
-
+                  <InputMask placeholder="40" />
                 </Form.Input>
-
               </Form.Group>
             </Form>
 
