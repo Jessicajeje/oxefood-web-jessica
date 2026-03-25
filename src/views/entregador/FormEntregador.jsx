@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { Button, Container, Divider, Form, Icon } from "semantic-ui-react";
 import MenuSistema from "../../MenuSistema";
+import { notifyError, notifySuccess } from '../../views/util/Util';
 
 export default function FormEntregador() {
 
@@ -105,19 +106,19 @@ const [foneCelular, setFoneCelular] = useState();
       //Alteração:
       axios.put("http://localhost:8080/api/entregador/" + idEntregador, entregadorRequest)
         .then((response) => {
-          console.log("Entregador alterado com sucesso.");
+          notifySuccess("Entregador alterado com sucesso.");
         })
         .catch((error) => {
-          console.log("Erro ao alterar um Entregador.");
+          notifyError("Erro ao alterar um Entregador.");
         });
     } else {
       //Cadastro:
       axios.post("http://localhost:8080/api/entregador", entregadorRequest)
         .then((response) => {
-          console.log("Entregador cadastrado com sucesso.");
+          notifySuccess("Entregador cadastrado com sucesso.");
         })
         .catch((error) => {
-          console.log("Erro ao incluir o entregador.");
+          notifyError("Erro ao incluir o entregador.");
         });
     }
   }

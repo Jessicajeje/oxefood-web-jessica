@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button, Container, Divider, Form, Icon } from "semantic-ui-react";
 import MenuSistema from "../../MenuSistema";
+import { notifyError, notifySuccess } from '../../views/util/Util';
 
 export default function FormProduto() {
   const { state } = useLocation();
@@ -45,19 +46,19 @@ export default function FormProduto() {
       //Alteração:
       axios.put("http://localhost:8080/api/produto/" + idProduto, produtoRequest)
         .then((response) => {
-          console.log("Produto alterado com sucesso.");
+          notifySuccess("Produto alterado com sucesso.");
         })
         .catch((error) => {
-          console.log("Erro ao alterar um produto.");
+          notifyError("Erro ao alterar um produto.");
         });
     } else {
       //Cadastro:
       axios.post("http://localhost:8080/api/produto", produtoRequest)
         .then((response) => {
-          console.log("Produto cadastrado com sucesso.");
+          notifySuccess("Produto cadastrado com sucesso.");
         })
         .catch((error) => {
-          console.log("Erro ao incluir o produto.");
+          notifyError("Erro ao incluir o produto.");
         });
     }
   }

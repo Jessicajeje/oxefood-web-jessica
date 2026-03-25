@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button, Container, Divider, Form, Icon } from "semantic-ui-react";
 import MenuSistema from "../../MenuSistema";
+import { notifyError, notifySuccess } from '../../views/util/Util';
+
 
 export default function FormCliente() {
   const {state} = useLocation();
@@ -42,19 +44,19 @@ export default function FormCliente() {
       //Alteração:
       axios.put("http://localhost:8080/api/cliente/" + idCliente, clienteRequest)
         .then((response) => {
-          console.log("Cliente alterado com sucesso.");
+          notifySuccess("Cliente alterado com sucesso.");
         })
         .catch((error) => {
-          console.log("Erro ao alter um cliente.");
+          notifyError("Erro ao alterar um cliente.");
         });
     } else {
       //Cadastro:
       axios.post("http://localhost:8080/api/cliente", clienteRequest)
         .then((response) => {
-          console.log("Cliente cadastrado com sucesso.");
+          notifySuccess("Cliente cadastrado com sucesso.");
         })
         .catch((error) => {
-          console.log("Erro ao incluir o cliente.");
+          notifyError("Erro ao incluir o cliente.");
         });
     }
   }
