@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button, Container, Divider, Form, Icon } from "semantic-ui-react";
 import MenuSistema from "../../MenuSistema";
-import { notifyError, notifySuccess } from '../../views/util/Util';
+import { notifyError, notifySuccess } from "../../views/util/Util";
 
 export default function FormProduto() {
   const { state } = useLocation();
@@ -15,6 +15,9 @@ export default function FormProduto() {
   const [valorUnitario, setValorUnitario] = useState();
   const [tempoEntregaMinimo, setTempoEntregaMinimo] = useState();
   const [tempoEntregaMaximo, setTempoEntregaMaximo] = useState();
+  const [listaCategoria, setListaCategoria] = useState([]);
+  const [idCategoria, setIdCategoria] = useState();
+
 
   useEffect(() => {
     if (state != null && state.id != null) {
@@ -28,12 +31,22 @@ export default function FormProduto() {
           setValorUnitario(response.data.valorUnitario);
           setTempoEntregaMinimo(response.data.tempoEntregaMinimo);
           setTempoEntregaMaximo(response.data.tempoEntregaMaximo);
+          setIdCategoria(response.data.categoria.id)
+
         });
     }
+    
+       axios.get("http://localhost:8080/api/CategoriaProduto")
+       .then((response) => {
+           const dropDownCategorias = response.data.map(c => ({ text: c.descricao, value: c.id }));
+           setListaCategoria(dropDownCategorias);
+       })
+
   }, [state]);
 
   function salvar() {
     let produtoRequest = {
+      idCategoria: idCategoria,
       codigo: codigo,
       titulo: titulo,
       descricao: descricao,
@@ -44,7 +57,8 @@ export default function FormProduto() {
 
     if (idProduto != null) {
       //Alteração:
-      axios.put("http://localhost:8080/api/produto/" + idProduto, produtoRequest)
+      axios
+        .put("http://localhost:8080/api/produto/" + idProduto, produtoRequest)
         .then((response) => {
           notifySuccess("Produto alterado com sucesso.");
         })
@@ -53,7 +67,8 @@ export default function FormProduto() {
         });
     } else {
       //Cadastro:
-      axios.post("http://localhost:8080/api/produto", produtoRequest)
+      axios
+        .post("http://localhost:8080/api/produto", produtoRequest)
         .then((response) => {
           notifySuccess("Produto cadastrado com sucesso.");
         })
@@ -69,7 +84,6 @@ export default function FormProduto() {
 
       <div style={{ marginTop: "3%" }}>
         <Container textAlign="justified">
-          
           {idProduto === undefined && (
             <h2>
               {" "}
@@ -115,6 +129,18 @@ export default function FormProduto() {
                   />
                 </Form.Input>
               </Form.Group>
+              <Form.Select
+                required
+                fluid
+                tabIndex="3"
+                placeholder="Selecione"
+                label="Categoria"
+                options={listaCategoria}
+                value={idCategoria}
+                onChange={(e, { value }) => {
+                  setIdCategoria(value);
+                }}
+              />
 
               <Form.Input required fluid label="Descrição">
                 <InputMask
