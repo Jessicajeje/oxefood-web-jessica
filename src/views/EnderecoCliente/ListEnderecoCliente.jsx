@@ -7,7 +7,6 @@ import { notifyError, notifySuccess } from "../util/Util";
 
 export default function ListEnderecoCliente() {
   const [lista, setLista] = useState([]);
-  const [idCliente, setIdCliente] = useState(1); // Substitua pelo ID do cliente desejado
   const [openModal, setOpenModal] = useState(false);
   const [idRemover, setIdRemover] = useState();
 
@@ -16,7 +15,7 @@ export default function ListEnderecoCliente() {
   }, []);
 
   function carregarLista() {
-    axios.get(`http://localhost:8080/api/cliente/${idCliente}/endereco`).then((response) => {
+    axios.get(`http://localhost:8080/api/cliente/endereco`).then((response) => {
       setLista(response.data);
     });
   }
