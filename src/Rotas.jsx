@@ -9,7 +9,7 @@ import Home from "./views/home/home";
 import FormProduto from "./views/produto/FormProduto";
 import ListProduto from './views/produto/ListProduto';
 import FormEnderecoCliente from "./views/EnderecoCliente/FormEnderecoCliente";
-import ListEnderecoCliente from "./views/EnderecoCliente/ListEnderecoCliente";
+
 
 function Rotas() {
   return (
@@ -25,7 +25,6 @@ function Rotas() {
         <Route path="form-categoriaproduto" element={<FormCategoriaProduto />} />
         <Route path="list-categoriaproduto" element={<ListCategoriaProduto />} />
         <Route path="form-endereco" element={<FormEnderecoCliente />} />
-          <Route path="list-endereco" element={<ListEnderecoCliente />} />
       </Routes>
     </>
   );
