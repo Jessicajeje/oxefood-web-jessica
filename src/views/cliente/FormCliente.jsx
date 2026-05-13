@@ -4,17 +4,18 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button, Container, Divider, Form, Icon } from "semantic-ui-react";
 import MenuSistema from "../../MenuSistema";
-import { notifyError, notifySuccess } from '../../views/util/Util';
-
+import { notifyError, notifySuccess } from "../../views/util/Util";
 
 export default function FormCliente() {
-  const {state} = useLocation();
+  const { state } = useLocation();
   const [idCliente, setIdCliente] = useState();
   const [nome, setNome] = useState();
   const [cpf, setCpf] = useState();
   const [dataNascimento, setDataNascimento] = useState();
   const [foneCelular, setFoneCelular] = useState();
   const [foneFixo, setFoneFixo] = useState();
+  const [listaEndereco, setListaEndereco] = useState([]);
+  const [idEndereco, setIdEndereco] = useState();
 
   useEffect(() => {
     if (state != null && state.id != null) {
@@ -27,8 +28,17 @@ export default function FormCliente() {
           setDataNascimento(response.data.dataNascimento);
           setFoneCelular(response.data.foneCelular);
           setFoneFixo(response.data.foneFixo);
+          setIdEndereco(response.data.endereco?.id);
         });
     }
+
+    axios.get("http://localhost:8080/api/cliente/endereco/").then((response) => {
+      const dropDownEnderecos = response.data.map((e) => ({
+        text: `${e.rua}, ${e.numero} - ${e.bairro}`,
+        value: e.id,
+      }));
+      setListaEndereco(dropDownEnderecos);
+    });
   }, [state]);
 
   function salvar() {
@@ -38,11 +48,13 @@ export default function FormCliente() {
       dataNascimento: dataNascimento,
       foneCelular: foneCelular,
       foneFixo: foneFixo,
+      idEndereco: idEndereco,
     };
 
     if (idCliente != null) {
       //Alteração:
-      axios.put("http://localhost:8080/api/cliente/" + idCliente, clienteRequest)
+      axios
+        .put("http://localhost:8080/api/cliente/" + idCliente, clienteRequest)
         .then((response) => {
           notifySuccess("Cliente alterado com sucesso.");
         })
@@ -51,7 +63,8 @@ export default function FormCliente() {
         });
     } else {
       //Cadastro:
-      axios.post("http://localhost:8080/api/cliente", clienteRequest)
+      axios
+        .post("http://localhost:8080/api/cliente", clienteRequest)
         .then((response) => {
           notifySuccess("Cliente cadastrado com sucesso.");
         })
@@ -67,14 +80,29 @@ export default function FormCliente() {
 
       <div style={{ marginTop: "3%" }}>
         <Container textAlign="justified">
-{ idCliente === undefined &&
-    <h2> <span style={{color: 'darkgray'}}> Cliente &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro</h2>
-}
+          {idCliente === undefined && (
+            <h2>
+              {" "}
+              <span style={{ color: "darkgray" }}>
+                {" "}
+                Cliente &nbsp;
+                <Icon name="angle double right" size="small" />{" "}
+              </span>{" "}
+              Cadastro
+            </h2>
+          )}
 
-{ idCliente !== undefined &&
-    <h2> <span style={{color: 'darkgray'}}> Cliente &nbsp;<Icon name='angle double right' size="small" /> </span> Alteração</h2>
-}
-
+          {idCliente !== undefined && (
+            <h2>
+              {" "}
+              <span style={{ color: "darkgray" }}>
+                {" "}
+                Cliente &nbsp;
+                <Icon name="angle double right" size="small" />{" "}
+              </span>{" "}
+              Alteração
+            </h2>
+          )}
 
           <Divider />
 
@@ -116,6 +144,16 @@ export default function FormCliente() {
                     onChange={(e) => setFoneFixo(e.target.value)}
                   />
                 </Form.Input>
+
+                <Form.Select
+                  required
+                  fluid
+                  label="Endereço"
+                  placeholder="Selecione o endereço"
+                  options={listaEndereco}
+                  value={idEndereco}
+                  onChange={(e, { value }) => setIdEndereco(value)}
+                />
 
                 <Form.Input fluid label="Data Nascimento" width={6}>
                   <InputMask
